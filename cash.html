@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Crunch CM 5</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .container { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 300px; margin: auto; }
+    input[type="number"] { width: 100%; padding: 5px; margin: 5px 0; margin-inline: -5px;}
+    input[type="date"] { width: 50%; padding: 5px; margin: 5px 0; margin-inline: 75px;}
+    input[type="text"] { width: 100%; padding: 5px; margin: 5px 0; margin-inline: -5px;}
+    button { margin-top: 10px; padding: 10px; width: 100%; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    #result { margin-top: 10px; margin-bottom: 10px; padding: 10px; background: #f1f1f1; border-radius: 5px; text-align: center; }
+    .download-buttons button { margin: 5px 0; background-color: hwb(48 0% 0%); color: rgb(0, 0, 0); }
+  </style>
+</head>
+<body>
+
+<!-- Labels -->
+<div class="container" id="cash-count">
+  <h3>The Crunch - Cash Counter</h3>
+
+  <!-- Type of Cash -->
+  <label>Type of Cash:
+    <select id="cashing">
+      <option value="" disabled selected>Cash:</option>
+      <option value="Actual">Actual Cash</option>
+      <option value="Remitted">Remitted Cash</option>
+      <option value="Starting">Starting Cash</option>
+    </select> <p></p>
+  </label>
+
+  <!-- Date -->
+  <label>Date Today:   <input type="date" id="countDate"></label>
+
+  <!-- Coins and Bills -->
+  <label>₱1 Coins: <input type="number" id="bill1" value=" "></label>
+  <label>₱5 Coins: <input type="number" id="bill5" value=" "></label>
+  <label>₱10 Coins: <input type="number" id="bill10" value=" "></label>
+  <label>₱20 Coins: <input type="number" id="bill20" value=" "></label>
+  <label>₱20 Bills: <input type="number" id="bill25" value=" "></label>
+  <label>₱50 Bills: <input type="number" id="bill50" value=" "></label>
+  <label>₱100 Bills: <input type="number" id="bill100" value=" "></label>
+  <label>₱200 Bills: <input type="number" id="bill200" value=" "></label>
+  <label>₱500 Bills: <input type="number" id="bill500" value=" "></label>
+  <label>₱1000 Bills: <input type="number" id="bill1000" value=" "></label>
+
+  <!-- In -->
+  <label onclick="showPaidInInfo()" style="cursor: pointer; color: rgb(255, 0, 0);">
+    Paid In (click me)  </label>
+  <div id="info" style="display: none; margin-top: 5px; color: gray;">
+   PAALALA : PARA LANG TO SA ACTUAL CASH!!! <br>
+   I-ZERO LANG KAPAG "REMITTED CASH" AT "STARTING CASH". <p>
+    KAPAG LANG NAKAPAG-CLOSE SHIFT NA KAYO PERO MAY MGA HUMABOL PA
+    NA CUSTOMER.
+   <p>
+    -----
+    <p>
+    Total na nadagdag (Paid In) (kung Magkano),
+    <br>Example: 
+    <br>₱200 
+  <p>    Tapos, ilagay sa "Note:" kung ano-ano at magkano. 
+    <br>Example: 
+   <br> ₱75 - 1 pc chicken <br>
+    ₱25 - 1 coke mismo  
+  <p>  Kapag Gcash yung ibinayad, huwag isama sa Paid In. <br>
+    Ilagay na lang sa may Gcash Counter, tapos ilagay kung anong oras.
+  </div>
+
+  <label for="note" title="
+  Total na nadagdag (Paid In) (kung Magkano), Pagkatapos ng Shift. 
+  Example: 
+  ₱200 
+
+  Tapos, ilagay sa Notes kung ano-ano at magkano. 
+  Example: 
+  ₱75 - 1 pc chicken 
+  ₱25 - 1 coke mismo"><input type="number" id="paidin" value=" "></label>
+  <input type="text" id="pinnote" placeholder="Note: "> <p></p>
+
+
+   <!-- Out -->
+   <label onclick="showPaidOutInfo()" style="cursor: pointer; color: rgb(255, 0, 0);">
+    Paid Out (click me)  </label>
+  <div id="outfo" style="display: none; margin-top: 5px; color: gray;">
+   PAALALA : PARA LANG TO SA ACTUAL CASH!!! <br>
+   I-ZERO LANG KAPAG "REMITTED CASH" AT "STARTING CASH". <p>
+    KAPAG LANG NAKAPAG-CLOSE SHIFT NA KAYO PERO MAY MGA BIBILHIN PA O GINASTOS.
+   <p>
+    -----
+    <p>
+    Total na nabawas (Paid Out) (kung Magkano),
+    <br>Example: 
+    <br>₱100 
+  <p>    Tapos, ilagay sa "Note:" kung ano-ano at magkano. 
+    <br>Example: 
+   <br> ₱40 - Dishwashing <br>
+    ₱20 - 2 tape <br>
+    ₱40 - 4 Powder Sabon
+  </div>
+
+  <label for="note" title="
+  Total na nabawas (Paid Out) (kung Magkano), Pagkatapos ng Shift. 
+  Example: 
+  ₱100 
+
+  Tapos, ilagay sa Notes kung ano-ano at magkano. 
+  Example: 
+  ₱40 - Dishwashing
+  ₱20 - 2 Tape
+  ₱40 - 4 Powder Sabon"><input type="number" id="paidout" value=" "></label>
+  <input type="text" id="poutnote" placeholder="Note: "> <p></p>  
+
+
+  <!-- Checked by -->
+  <p>
+  <label>Checked and Verified by:
+    <select id="employeeName">
+      <option value="" disabled selected>Name:</option>
+      <option value="Frenche">Frenche</option>
+      <option value="Mikaela">Mikaela</option>
+      <option value="Lucifer">Lucifer</option>
+      <option value="Glorie">Glorie - Owner</option>
+
+    </select>
+  </label>
+  <p>
+
+  <button onclick="calculateTotal()">Calculate Total</button>
+
+  <div id="result">
+    Total: ₱<span id="totalAmount">0</span>
+  </div>
+
+  <div class="download-buttons">
+    <button onclick="downloadText()">Export as Text File</button>
+    <button onclick="downloadPNG()">Export as Picture</button>
+  </div>
+</div>
+
+
+<!-- Paid In Script -->
+<script>
+    function showPaidInInfo() {
+      const info = document.getElementById("info");
+      info.style.display = (info.style.display === "none") ? "block" : "none";
+    }
+    </script>
+
+<!-- Paid Out Script -->
+<script>
+    function showPaidOutInfo() {
+      const outfo = document.getElementById("outfo");
+      outfo.style.display = (outfo.style.display === "none") ? "block" : "none";
+    }
+    </script>
+
+<!-- Download as Picture -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+function calculateTotal() {
+  const b1 = parseInt(document.getElementById("bill1").value) || 0;  
+  const b5 = parseInt(document.getElementById("bill5").value) || 0;    
+  const b10 = parseInt(document.getElementById("bill10").value) || 0;
+  const b20 = parseInt(document.getElementById("bill20").value) || 0;  
+  const b25 = parseInt(document.getElementById("bill25").value) || 0;    
+  const b50 = parseInt(document.getElementById("bill50").value) || 0;    
+  const b100 = parseInt(document.getElementById("bill100").value) || 0;
+  const b200 = parseInt(document.getElementById("bill200").value) || 0;
+  const b500 = parseInt(document.getElementById("bill500").value) || 0;
+  const b1000 = parseInt(document.getElementById("bill1000").value) || 0;
+  const pin = parseInt(document.getElementById("paidin").value) || 0;
+  const pout = parseInt(document.getElementById("paidout").value) || 0;
+  const total = (b1 * 1) + (b5 * 5) + (b10 * 10) + (b20 * 20) + (b25 * 20) + (b50 * 50) + (b100 * 100) + (b200 * 200) + (b500 * 500) + (b1000 * 1000) + (pin * 1) - (pout * 1);
+  document.getElementById("totalAmount").innerText = total.toLocaleString();
+}
+
+function downloadText() {
+  const b1 = document.getElementById("bill1").value;
+  const b5 = document.getElementById("bill5").value;  
+  const b10 = document.getElementById("bill10").value;
+  const b20 = document.getElementById("bill20").value;
+  const b25 = document.getElementById("bill25").value;
+  const b50 = document.getElementById("bill50").value;
+  const b100 = document.getElementById("bill100").value;
+  const b200 = document.getElementById("bill200").value;
+  const b500 = document.getElementById("bill500").value;
+  const b1000 = document.getElementById("bill1000").value;
+  const pin = document.getElementById("paidin").value;
+  const pinote = document.getElementById("pinnote").value;
+  const pout = document.getElementById("paidout").value;
+  const ponote = document.getElementById("poutnote").value;
+  const total = document.getElementById("totalAmount").innerText;
+  const date = document.getElementById("countDate").value || "[No date]";
+  const employee = document.getElementById("employeeName").value || "[No employee selected]";
+
+  const content = `Cash Count Summary:\nDate: ${date}\nChecked and Verified by: ${employee}\n₱1 Coins: ${b1}\n₱5 Coins: ${b5}\n₱10 Coins: ${b10}\n₱20 Coins: ${b20}\n₱20 Bills: ${b25}\n₱50 Bills: ${b50}\n₱100 Bills: ${b100}\n₱200 Bills: ${b200}\n₱500 Bills: ${b500}\n₱1000 Bills: ${b1000}\nPaid In: ₱${pin}\nNote: ${pinote}\nPaid Out: ₱${pout}\nNote: ${ponote}\nTotal: ₱${total}`;
+
+  const blob = new Blob([content], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "cash_summary.txt";
+  link.click();
+}
+
+function downloadPNG() {
+  const target = document.getElementById("cash-count");
+  html2canvas(target).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "cash_summary.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+</script>
+
+<p style="text-align: center; font-size: 6px;">Developed by: Lucifer | Version 4.0</p>
+
+</body>
+</html>
