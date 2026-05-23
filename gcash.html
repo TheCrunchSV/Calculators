@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Crunch GM 2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    input[type="number"], input[type="time"] {
+      padding: 5px;
+      font-size: 1em;
+      width: 48%;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .add-btn { background: #007bff; color: white; }
+    .txt-btn { background: #242424; color: white; }
+    .png-btn { background: #27e560; color: white; }
+    .total {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="gcashContainer">
+  <h2>Gcash Counter</h2>
+
+<!-- Date -->
+<label>Date Today:   <input type="date" id="countDate"></label>
+<p></p>
+
+  <div id="entries"></div>
+
+  <button class="add-btn" onclick="addEntry()">Add Gcash</button>
+
+  <div class="total">Total: ₱<span id="totalAmount">0</span></div>
+
+  <button class="txt-btn" onclick="downloadText()">Export as Text File</button>
+  <button class="png-btn" onclick="downloadPNG()">Export as Picture</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+let entryCount = 0;
+
+function addEntry(amount = "", time = "") {
+  const entries = document.getElementById("entries");
+
+  const row = document.createElement("div");
+  row.className = "row";
+  row.id = `entry-${entryCount}`;
+
+  row.innerHTML = `
+    <input type="number" placeholder="₱ Amount" value="${amount}" oninput="updateTotal()">
+    <input type="time" value="${time}" onchange="updateTotal()">
+  `;
+
+  entries.appendChild(row);
+  entryCount++;
+  updateTotal();
+}
+
+function updateTotal() {
+  const rows = document.querySelectorAll("#entries .row");
+  let total = 0;
+
+  rows.forEach(row => {
+    const amountInput = row.querySelector("input[type='number']");
+    const value = parseFloat(amountInput.value) || 0;
+    total += value;
+  });
+
+  document.getElementById("totalAmount").innerText = total.toLocaleString();
+}
+
+function downloadText() {
+  const date = document.getElementById("countDate").value || "[No date]";
+  const rows = document.querySelectorAll("#entries .row");
+  let content = "Gcash Entry Log:\n\n";
+  let total = 0;
+
+  rows.forEach((row, index) => {
+    const amount = row.querySelector("input[type='number']").value || "0";
+    const time = row.querySelector("input[type='time']").value || "--:--";
+    content += `Entry ${index + 1}: ₱${amount} at ${time}\n`;
+    total += parseFloat(amount) || 0;
+  });
+
+  content += `\nTotal: ₱${total.toLocaleString()}\n\nDate: ${date}`;
+
+  const blob = new Blob([content], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "gcash_summary.txt";
+  link.click();
+}
+
+function downloadPNG() {
+  const container = document.getElementById("gcashContainer");
+  html2canvas(container).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "gcash_summary.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+// Add one entry by default
+addEntry();
+</script>
+
+<p style="text-align: center; font-size: 6px;">Developed by: Lucifer | Version 2.0</p>
+
+</body>
+</html>
